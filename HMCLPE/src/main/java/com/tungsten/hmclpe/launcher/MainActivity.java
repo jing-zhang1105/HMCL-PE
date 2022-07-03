@@ -227,6 +227,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (uiManager.currentUI == uiManager.downloadOptifineUI){
             uiManager.downloadOptifineUI.onStop();
         }
+        if (uiManager.currentUI == uiManager.installPackageUI) {
+            uiManager.installPackageUI.onStop();
+        }
         uiManager.currentUI = uiManager.uis.get(uiManager.uis.size() - 1);
     }
 

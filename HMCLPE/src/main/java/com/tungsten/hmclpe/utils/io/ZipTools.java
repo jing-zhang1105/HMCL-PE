@@ -1,5 +1,9 @@
 package com.tungsten.hmclpe.utils.io;
 
+import com.tungsten.hmclpe.utils.platform.OperatingSystem;
+
+import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -7,10 +11,18 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.CodingErrorAction;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Enumeration;
+import java.util.Objects;
 import java.util.zip.CRC32;
 import java.util.zip.CheckedOutputStream;
 import java.util.zip.ZipEntry;
@@ -20,7 +32,7 @@ import java.util.zip.ZipOutputStream;
 
 public class ZipTools {
 
-    public static String readNormalMeta(String file,String targetName) throws IOException {
+    public static String readNormalMeta(String file, String targetName) throws IOException {
         Charset charset = StandardCharsets.UTF_8;
         ZipFile zf = new ZipFile(file, charset);
         InputStream in = new BufferedInputStream(new FileInputStream(file));
@@ -41,7 +53,7 @@ public class ZipTools {
         return "";
     }
 
-    public static InputStream getFileInputStream(String file,String targetName) throws IOException {
+    public static InputStream getFileInputStream(String file, String targetName) throws IOException {
         Charset charset = StandardCharsets.UTF_8;
         ZipFile zf = new ZipFile(file, charset);
         InputStream in = new BufferedInputStream(new FileInputStream(file));
@@ -59,7 +71,7 @@ public class ZipTools {
         return null;
     }
 
-    public static boolean isFileExist(String file,String targetName) throws IOException {
+    public static boolean isFileExist(String file, String targetName) throws IOException {
         InputStream in = new BufferedInputStream(new FileInputStream(file));
         ZipInputStream zin = new ZipInputStream(in);
         ZipEntry ze;
@@ -103,9 +115,8 @@ public class ZipTools {
         else {
             // 压缩目录中的文件或子目录
             File[] childFileList = file.listFiles();
-            for (int n = 0; n < childFileList.length; n++) {
-                childFileList[n].getAbsolutePath().indexOf(
-                        file.getAbsolutePath());
+            for (int n = 0; n < Objects.requireNonNull(childFileList).length; n++) {
+                childFileList[n].getAbsolutePath().indexOf(file.getAbsolutePath());
                 zip(srcRootDir, childFileList[n], zos);
             }
         }
@@ -156,8 +167,6 @@ public class ZipTools {
             // 调用递归压缩方法进行目录或文件压缩
             zip(srcRootDir, srcFile, zos);
             zos.flush();
-        } catch (IOException e) {
-            throw e;
         } finally {
             try {
                 if (zos != null) {
@@ -170,7 +179,7 @@ public class ZipTools {
     }
 
     public static void unzipFile(String zipFilePath, String unzipFilePath, boolean includeZipFileName) throws IOException {
-        unzipFile(zipFilePath,unzipFilePath,new ArrayList<>(),includeZipFileName);
+        unzipFile(zipFilePath, unzipFilePath, new ArrayList<>(), includeZipFileName);
     }
 
     @SuppressWarnings("unchecked")
@@ -246,4 +255,75 @@ public class ZipTools {
         return !isEmpty(s);
     }
 
+    public static Charset findSuitableEncoding(Path path) throws IOException {
+        return findSuitableEncoding(path, Charset.availableCharsets().values());
+    }
+
+    public static Charset findSuitableEncoding(Path path, Collection<Charset> collection) throws IOException {
+        org.apache.commons.compress.archivers.zip.ZipFile openZipFile = openZipFile(path, StandardCharsets.UTF_8);
+        try {
+            Charset findSuitableEncoding = findSuitableEncoding(openZipFile, collection);
+            openZipFile.close();
+            return findSuitableEncoding;
+        } catch (Throwable th) {
+            try {
+                openZipFile.close();
+            } catch (Throwable th2) {
+                th.addSuppressed(th2);
+            }
+            throw th;
+        }
+    }
+
+    public static org.apache.commons.compress.archivers.zip.ZipFile openZipFile(Path path, Charset charset) throws IOException {
+        return new org.apache.commons.compress.archivers.zip.ZipFile(Files.newByteChannel(path), charset.name());
+    }
+
+    public static Charset findSuitableEncoding(org.apache.commons.compress.archivers.zip.ZipFile zipFile, Collection<Charset> collection) throws IOException {
+        if (testEncoding(zipFile, StandardCharsets.UTF_8)) {
+            return StandardCharsets.UTF_8;
+        }
+        if (OperatingSystem.NATIVE_CHARSET != StandardCharsets.UTF_8 && testEncoding(zipFile, OperatingSystem.NATIVE_CHARSET)) {
+            return OperatingSystem.NATIVE_CHARSET;
+        }
+        for (Charset charset : collection) {
+            if (charset != null && testEncoding(zipFile, charset)) {
+                return charset;
+            }
+        }
+        throw new IOException("Cannot find suitable encoding for the zip.");
+    }
+
+    public static boolean testEncoding(org.apache.commons.compress.archivers.zip.ZipFile zipFile, Charset charset) throws IOException {
+        Enumeration<ZipArchiveEntry> entries = zipFile.getEntries();
+        CharsetDecoder newCharsetDecoder = newCharsetDecoder(charset);
+        CharBuffer allocate = CharBuffer.allocate(32);
+        while (entries.hasMoreElements()) {
+            ZipArchiveEntry nextElement = entries.nextElement();
+            if (!nextElement.getGeneralPurposeBit().usesUTF8ForNames()) {
+                newCharsetDecoder.reset();
+                byte[] rawName = nextElement.getRawName();
+                int length = (int) (rawName.length * newCharsetDecoder.maxCharsPerByte());
+                if (length != 0) {
+                    if (length <= allocate.capacity()) {
+                        allocate.clear();
+                    } else {
+                        allocate = CharBuffer.allocate(length);
+                    }
+                    if (!newCharsetDecoder.decode(ByteBuffer.wrap(rawName, 0, rawName.length), allocate, true).isUnderflow() || !newCharsetDecoder.flush(allocate).isUnderflow()) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    private static CharsetDecoder newCharsetDecoder(Charset charset) {
+        return charset.newDecoder().onMalformedInput(CodingErrorAction.REPORT).onUnmappableCharacter(CodingErrorAction.REPORT);
+    }
+
+    public static String readTextZipEntry(org.apache.commons.compress.archivers.zip.ZipFile zipFile, String str) throws IOException {
+        return IOUtils.readFullyAsString(zipFile.getInputStream(zipFile.getEntry(str)), StandardCharsets.UTF_8);
+    }
 }

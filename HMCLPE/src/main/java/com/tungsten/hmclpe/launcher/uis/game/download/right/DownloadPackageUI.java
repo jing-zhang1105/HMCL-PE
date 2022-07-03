@@ -50,6 +50,7 @@ public class DownloadPackageUI extends BaseUI implements View.OnClickListener, A
     private Spinner editCategory;
     private Spinner editSort;
     private Button search;
+    private Button installPackage;
 
     private ArrayList<String> sourceList;
     private ArrayAdapter<String> sourceListAdapter;
@@ -158,6 +159,8 @@ public class DownloadPackageUI extends BaseUI implements View.OnClickListener, A
         packageList = new ArrayList<>();
         downloadPackageListAdapter = new DownloadResourceAdapter(context,activity,repository,packageList,1);
         packageListView.setAdapter(downloadPackageListAdapter);
+
+        this.installPackage = activity.findViewById(R.id.install_package_from_download_page);
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -239,6 +242,9 @@ public class DownloadPackageUI extends BaseUI implements View.OnClickListener, A
 
     @Override
     public void onClick(View view) {
+        if (view == installPackage) {
+            activity.uiManager.switchMainUI(activity.uiManager.installPackageUI);
+        }
         if (view == search){
             search();
         }

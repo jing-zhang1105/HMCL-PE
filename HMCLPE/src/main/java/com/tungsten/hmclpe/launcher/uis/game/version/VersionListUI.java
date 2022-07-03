@@ -73,6 +73,9 @@ public class VersionListUI extends BaseUI implements View.OnClickListener {
         contentListParent = activity.findViewById(R.id.content_list_parent);
         startAddGameDirUI.post(() -> gameDirList.setMaxHeight(contentListParent.getHeight() - startAddGameDirUI.getHeight() - ConvertUtils.dip2px(context,10)));
 
+        startInstallPackageUI = activity.findViewById(R.id.start_install_package_ui);
+        startInstallPackageUI.setOnClickListener(this);
+
         new Thread(this::refreshVersionList).start();
     }
 
@@ -105,6 +108,9 @@ public class VersionListUI extends BaseUI implements View.OnClickListener {
         if (v == startGlobalSettingUI){
             activity.uiManager.switchMainUI(activity.uiManager.settingUI);
             activity.uiManager.settingUI.settingUIManager.switchSettingUIs(activity.uiManager.settingUI.settingUIManager.universalGameSettingUI);
+        }
+        if (v == startInstallPackageUI){
+            activity.uiManager.switchMainUI(activity.uiManager.installPackageUI);
         }
     }
 

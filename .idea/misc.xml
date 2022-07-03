@@ -439,10 +439,13 @@
         <entry key="..\:/Users/Tungsten/Desktop/Projects/HelloMinecraftLauncherPocketEdition/filepicker/src/main/res/menu/toolbar_default_menu_filechooser.xml" value="0.12708333333333333" />
         <entry key="..\:/Users/Tungsten/Desktop/Projects/HelloMinecraftLauncherPocketEdition/filepicker/src/main/res/menu/toolbar_multiselect_menu.xml" value="0.12708333333333333" />
         <entry key="..\:/Users/Tungsten/Desktop/Projects/HelloMinecraftLauncherPocketEdition/filepicker/src/main/res/menu/toolbar_multiselect_menu_filechooser.xml" value="0.12708333333333333" />
+        <entry key="..\:/program/HMCL-PE/HMCLPE/src/main/res/layout/activity_main.xml" value="0.1272644927536232" />
         <entry key="..\:/program/HMCL-PE/HMCLPE/src/main/res/layout/dialog_update_launcher.xml" value="0.1272644927536232" />
         <entry key="..\:/program/HMCL-PE/HMCLPE/src/main/res/layout/ui_game_manager_game.xml" value="0.358695652173913" />
+        <entry key="..\:/program/HMCL-PE/HMCLPE/src/main/res/layout/ui_install_package.xml" value="0.18489583333333334" />
         <entry key="..\:/program/HMCL-PE/HMCLPE/src/main/res/layout/ui_main.xml" value="0.358695652173913" />
         <entry key="..\:/program/HMCL-PE/HMCLPE/src/main/res/layout/ui_setting_global_game.xml" value="0.22" />
+        <entry key="..\:/program/HMCL-PE/HMCLPE/src/main/res/layout/ui_version_list.xml" value="0.18489583333333334" />
       </map>
     </option>
   </component>

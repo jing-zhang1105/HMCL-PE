@@ -63,7 +63,7 @@ public class ModpackHelper {
     }
 
     public static boolean findMinecraftDirectoryInManuallyCreatedModpack(String str) throws IOException, UnsupportedModpackException {
-        ZipInputStream zipInputStream = new ZipInputStream(new BufferedInputStream(new FileInputStream(str)));
+        ZipInputStream zipInputStream = new ZipInputStream(new BufferedInputStream(new FileInputStream(str)), Charset.forName("GBK"));
         while (true) {
             ZipEntry nextEntry = zipInputStream.getNextEntry();
             if (nextEntry == null) {

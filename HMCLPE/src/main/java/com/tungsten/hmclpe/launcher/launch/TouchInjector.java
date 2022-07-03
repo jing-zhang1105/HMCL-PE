@@ -6,7 +6,8 @@ import java.util.Vector;
 
 public class TouchInjector {
 
-    public static Vector<String> rebaseArguments(Vector<String> args) {
+    public static Vector<String> rebaseArguments(GameLaunchSetting gameLaunchSetting, Vector<String> args) {
+        if (!gameLaunchSetting.touchInjector) return args;
         Vector<String> newArgs = new Vector<>();
         if (args.contains("Forge") || args.contains("fmlclient")) {
             for (int i = 0; i < args.size(); i++) {

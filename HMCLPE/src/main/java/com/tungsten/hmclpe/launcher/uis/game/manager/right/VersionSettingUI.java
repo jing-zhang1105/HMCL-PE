@@ -131,6 +131,7 @@ public class VersionSettingUI extends BaseUI implements View.OnClickListener, Co
     private SwitchCompat notCheckGameFile;
     private SwitchCompat notCheckForge;
     private SwitchCompat notCheckJVM;
+    private SwitchCompat checkTouchInjector;
 
     private EditText editServer;
 
@@ -409,6 +410,9 @@ public class VersionSettingUI extends BaseUI implements View.OnClickListener, Co
             pojavRendererSettingHeight = pojavRendererSetting.getHeight();
             pojavRendererSetting.setVisibility(View.GONE);
         });
+
+        checkTouchInjector = activity.findViewById(R.id.switch_touch_injector_isolate);
+        checkTouchInjector.setOnCheckedChangeListener(this);
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -623,6 +627,8 @@ public class VersionSettingUI extends BaseUI implements View.OnClickListener, Co
             pojavRendererVirGL.setChecked(true);
             currentPojavRenderer.setText(context.getText(R.string.game_setting_ui_pojav_renderer_virgl));
         }
+
+        checkTouchInjector.setChecked(setting.touchInjector);
     }
 
     private ArrayList<View> getAllChild(ViewGroup viewGroup) {
@@ -840,6 +846,9 @@ public class VersionSettingUI extends BaseUI implements View.OnClickListener, Co
             }
             if (compoundButton == notCheckJVM && privateGameSetting != null){
                 privateGameSetting.notCheckJvm = b;
+            }
+            if (compoundButton == checkTouchInjector && privateGameSetting != null){
+                privateGameSetting.touchInjector = b;
             }
             GsonUtils.savePrivateGameSetting(privateGameSetting, activity.launcherSetting.gameFileDirectory + "/versions/" + versionName + "/hmclpe.cfg");
         }

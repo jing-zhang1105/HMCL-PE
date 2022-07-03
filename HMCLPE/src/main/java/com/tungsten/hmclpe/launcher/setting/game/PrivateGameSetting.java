@@ -8,8 +8,6 @@ import com.tungsten.hmclpe.launcher.setting.game.child.JavaSetting;
 import com.tungsten.hmclpe.launcher.setting.game.child.PojavLauncherSetting;
 import com.tungsten.hmclpe.launcher.setting.game.child.RamSetting;
 
-import java.util.ArrayList;
-
 public class PrivateGameSetting implements Cloneable{
 
     public boolean forceEnable;
@@ -28,8 +26,9 @@ public class PrivateGameSetting implements Cloneable{
     public RamSetting ramSetting;
     public String controlLayout;
     public float scaleFactor;
+    public boolean touchInjector;
 
-    public PrivateGameSetting (boolean forceEnable,boolean enable,boolean log,boolean notCheckJvm,boolean notCheckMinecraft,boolean notCheckForge,JavaSetting javaSetting,String extraJavaFlags,String extraMinecraftFlags,String server,GameDirSetting gameDirSetting,BoatLauncherSetting boatLauncherSetting,PojavLauncherSetting pojavLauncherSetting,RamSetting ramSetting,String controlLayout,float scaleFactor){
+    public PrivateGameSetting (boolean forceEnable,boolean enable,boolean log,boolean notCheckJvm,boolean notCheckMinecraft,boolean notCheckForge,JavaSetting javaSetting,String extraJavaFlags,String extraMinecraftFlags,String server,GameDirSetting gameDirSetting,BoatLauncherSetting boatLauncherSetting,PojavLauncherSetting pojavLauncherSetting,RamSetting ramSetting,String controlLayout,float scaleFactor, boolean touchInjector) {
         this.forceEnable = forceEnable;
         this.enable = enable;
         this.log = log;
@@ -46,6 +45,7 @@ public class PrivateGameSetting implements Cloneable{
         this.ramSetting = ramSetting;
         this.controlLayout = controlLayout;
         this.scaleFactor = scaleFactor;
+        this.touchInjector = touchInjector;
     }
 
     public static String getGameDir(String gameFileDir,String currentVersion,GameDirSetting gameDirSetting) {

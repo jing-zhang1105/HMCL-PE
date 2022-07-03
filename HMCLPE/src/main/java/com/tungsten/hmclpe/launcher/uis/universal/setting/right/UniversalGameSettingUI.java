@@ -112,6 +112,7 @@ public class UniversalGameSettingUI extends BaseUI implements View.OnClickListen
     private SwitchCompat notCheckGameFile;
     private SwitchCompat notCheckForge;
     private SwitchCompat notCheckJVM;
+    private SwitchCompat checkTouchInjector;
 
     private EditText editServer;
 
@@ -371,6 +372,9 @@ public class UniversalGameSettingUI extends BaseUI implements View.OnClickListen
             pojavRendererSettingHeight = pojavRendererSetting.getHeight();
             pojavRendererSetting.setVisibility(View.GONE);
         });
+
+        checkTouchInjector = activity.findViewById(R.id.switch_touch_injector);
+        checkTouchInjector.setOnCheckedChangeListener(this);
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -442,6 +446,9 @@ public class UniversalGameSettingUI extends BaseUI implements View.OnClickListen
         }
         if (buttonView == notCheckJVM){
             activity.privateGameSetting.notCheckJvm = isChecked;
+        }
+        if (buttonView == checkTouchInjector){
+            activity.privateGameSetting.touchInjector = isChecked;
         }
         GsonUtils.savePrivateGameSetting(activity.privateGameSetting, AppManifest.SETTING_DIR + "/private_game_setting.json");
     }

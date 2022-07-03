@@ -39,7 +39,9 @@ public class GameLaunchSetting {
 
     public String gameFileDirectory;
 
-    public GameLaunchSetting(Account account,String home,String currentVersion,String javaPath,String extraJavaFlags,String extraMinecraftFlags,String game_directory,String boatRenderer,String pojavRenderer,float scaleFactor,String gameFileDirectory,int minRam,int maxRam,String controlLayout,String server,boolean fullscreen,boolean log){
+    public boolean touchInjector;
+
+    public GameLaunchSetting(Account account,String home,String currentVersion,String javaPath,String extraJavaFlags,String extraMinecraftFlags,String game_directory,String boatRenderer,String pojavRenderer,float scaleFactor,String gameFileDirectory,int minRam,int maxRam,String controlLayout,String server,boolean fullscreen,boolean log, boolean touchInjector) {
         this.account = account;
         this.home = home;
         this.currentVersion = currentVersion;
@@ -59,6 +61,7 @@ public class GameLaunchSetting {
         this.log = log;
 
         this.gameFileDirectory = gameFileDirectory;
+        this.touchInjector = touchInjector;
     }
 
     public static boolean isHighVersion(GameLaunchSetting gameLaunchSetting){
@@ -119,7 +122,8 @@ public class GameLaunchSetting {
                 privateGameSetting.controlLayout,
                 privateGameSetting.server,
                 launcherSetting.fullscreen,
-                privateGameSetting.log);
+                privateGameSetting.log,
+                privateGameSetting.touchInjector);
     }
 
 }

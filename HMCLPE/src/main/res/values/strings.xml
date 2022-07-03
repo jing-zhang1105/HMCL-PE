@@ -686,6 +686,7 @@
     <string name="game_setting_ui_pojav_renderer">PojavLauncher 渲染方式</string>
     <string name="game_setting_ui_pojav_renderer_gl4es_114" translatable="false">GL4ES-1.1.4 (OpenGL 2.1)</string>
     <string name="game_setting_ui_pojav_renderer_virgl" translatable="false">VirGLRenderer (OpenGL 4.3)</string>
+    <string name="game_setting_ui_touch_injector">仿基岩版触控</string>
 
     <string name="universal_setting_ui_declare">Hello Minecraft! Launcher Pocket Edition 是一个免费、自由、开放源代码的 Minecraft 启动器。您的赞助将帮助 Hello Minecraft! Launcher Pocket Edition 获得更好的发展，还可以获得 HMCL-PE 的开发进展。</string>
     <string name="universal_setting_ui_update">启动器更新</string>

@@ -90,7 +90,7 @@ public class PojavLauncher {
             }
             String[] extraMinecraftArgs = gameLaunchSetting.extraMinecraftFlags.split(" ");
             Collections.addAll(args, extraMinecraftArgs);
-            return TouchInjector.rebaseArguments(args);
+            return TouchInjector.rebaseArguments(gameLaunchSetting, args);
         }
         catch (Exception e){
             e.printStackTrace();

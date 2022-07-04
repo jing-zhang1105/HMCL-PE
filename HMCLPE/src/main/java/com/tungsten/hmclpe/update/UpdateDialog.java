@@ -143,6 +143,11 @@ public class UpdateDialog extends Dialog implements View.OnClickListener {
                                 }
 
                                 @Override
+                                public void onDownloadSuccess(String path) {
+
+                                }
+
+                                @Override
                                 public void onCancelled() {
 
                                 }
@@ -198,6 +203,11 @@ public class UpdateDialog extends Dialog implements View.OnClickListener {
                                         intent.setDataAndType(apkUri, "application/vnd.android.package-archive");
                                         getContext().startActivity(intent);
                                     });
+                                }
+
+                                @Override
+                                public void onDownloadSuccess(String path) {
+
                                 }
 
                                 @Override

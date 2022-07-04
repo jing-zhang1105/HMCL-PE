@@ -149,7 +149,7 @@ public class DownloadResourceUI extends BaseDownloadUI implements View.OnClickLi
         if (requestCode == DOWNLOAD_RESOURCE_REQUEST && resultCode == Activity.RESULT_OK && data != null && selectedVersion != null) {
             Uri uri = data.getData();
             String dir = UriUtils.getRealPathFromUri_AboveApi19(context,uri);
-            EditDownloadNameDialog dialog = new EditDownloadNameDialog(context, this, selectedVersion, false, dir);
+            EditDownloadNameDialog dialog = new EditDownloadNameDialog(context, this, selectedVersion, false, dir, null);
             dialog.show();
         }
     }

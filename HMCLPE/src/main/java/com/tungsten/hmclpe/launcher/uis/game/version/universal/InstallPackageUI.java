@@ -1,9 +1,11 @@
 package com.tungsten.hmclpe.launcher.uis.game.version.universal;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Environment;
 import android.text.Html;
 import android.view.View;
@@ -15,13 +17,18 @@ import android.widget.TextView;
 
 import com.tungsten.filepicker.Constants;
 import com.tungsten.filepicker.FileChooser;
+import com.tungsten.filepicker.FolderChooser;
 import com.tungsten.hmclpe.R;
 import com.tungsten.hmclpe.launcher.MainActivity;
+import com.tungsten.hmclpe.launcher.dialogs.EditDownloadNameDialog;
+import com.tungsten.hmclpe.launcher.dialogs.EditDownloadUrlDialog;
+import com.tungsten.hmclpe.launcher.list.install.DownloadTaskListBean;
 import com.tungsten.hmclpe.launcher.mod.ManuallyCreatedModpackException;
 import com.tungsten.hmclpe.launcher.mod.Modpack;
 import com.tungsten.hmclpe.launcher.mod.ModpackHelper;
 import com.tungsten.hmclpe.launcher.mod.UnsupportedModpackException;
 import com.tungsten.hmclpe.launcher.uis.tools.BaseUI;
+import com.tungsten.hmclpe.manifest.AppManifest;
 import com.tungsten.hmclpe.utils.animation.CustomAnimationUtils;
 import com.tungsten.hmclpe.utils.file.UriUtils;
 import com.tungsten.hmclpe.utils.io.FileUtils;
@@ -30,9 +37,11 @@ import com.tungsten.hmclpe.utils.string.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class InstallPackageUI extends BaseUI implements View.OnClickListener {
     public static final int SELECT_PACKAGE_REQUEST = 5700;
+    public static final int SELECT_SAVE_PACKAGE_REQUEST = 5701;
     private TextView authorText;
     private EditText editName;
     private Button install;
@@ -47,6 +56,36 @@ public class InstallPackageUI extends BaseUI implements View.OnClickListener {
     private LinearLayout selectLayout;
     private Button showDescription;
     private TextView versionText;
+
+    private String url = "";
+
+    private final EditDownloadUrlDialog.CallBacks editUrlCallBacks = new EditDownloadUrlDialog.CallBacks() {
+        @Override
+        public void onSuccess(String url) {
+            InstallPackageUI.this.url = url;
+            Intent intent = new Intent(context, FolderChooser.class);
+            intent.putExtra(Constants.SELECTION_MODE, Constants.SELECTION_MODES.SINGLE_SELECTION.ordinal());
+            intent.putExtra(Constants.INITIAL_DIRECTORY, new File(AppManifest.DEFAULT_GAME_DIR).getAbsolutePath());
+            activity.startActivityForResult(intent, SELECT_SAVE_PACKAGE_REQUEST);
+        }
+
+        @Override
+        public void onCancel() {
+
+        }
+    };
+
+    private final EditDownloadNameDialog.CallBacks downloadCallbacks = new EditDownloadNameDialog.CallBacks() {
+        @Override
+        public void onDownloadSuccess(String path) {
+            parseInstallPackage(new File(path), path);
+        }
+
+        @Override
+        public void onDownloadError(ArrayList<DownloadTaskListBean> failedFile) {
+
+        }
+    };
 
     public InstallPackageUI(Context context, MainActivity activity) {
         super(context, activity);
@@ -93,6 +132,9 @@ public class InstallPackageUI extends BaseUI implements View.OnClickListener {
             builder.setPositiveButton(context.getString(R.string.dialog_package_description_positive), null);
             builder.create().show();
         }
+        if (v == installOnline) {
+            new EditDownloadUrlDialog(activity, editUrlCallBacks).show();
+        }
     }
 
     @Override
@@ -112,72 +154,79 @@ public class InstallPackageUI extends BaseUI implements View.OnClickListener {
     }
 
     @Override
-    public void onActivityResult(int i, int i2, Intent intent) {
-        super.onActivityResult(i, i2, intent);
-        if (i == SELECT_PACKAGE_REQUEST && i2 != -1) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == SELECT_PACKAGE_REQUEST && resultCode != -1) {
             activity.backToLastUI();
         }
-        if (i == SELECT_PACKAGE_REQUEST && i2 == -1 && intent != null) {
-            final String filePath = UriUtils.getRealPathFromUri_AboveApi19(context, intent.getData());
-            selectLayout.setVisibility(View.GONE);
-            installLayout.setVisibility(View.GONE);
-            progressBar.setVisibility(View.VISIBLE);
+        if (requestCode == SELECT_PACKAGE_REQUEST && resultCode == -1 && data != null) {
+            final String filePath = UriUtils.getRealPathFromUri_AboveApi19(context, data.getData());
             assert filePath != null;
-            File file = new File(filePath);
-            new Thread(() -> {
-                try {
-                    modpack = ModpackHelper.readModpackManifest(file.toPath(), ZipTools.findSuitableEncoding(file.toPath()));
-                    activity.runOnUiThread(() -> {
-                        selectLayout.setVisibility(View.GONE);
-                        installLayout.setVisibility(View.VISIBLE);
-                        progressBar.setVisibility(View.GONE);
-                        pathText.setText(filePath);
-
-                        String modPackName = modpack.getName() == null || (StringUtils.isBlank(modpack.getName())) ? FileUtils.getNameWithoutExtension(file) : modpack.getName();
-                        nameText.setText(modPackName);
-                        editName.setText(modPackName);
-
-                        String version = modpack.getVersion() == null ? "" : modpack.getVersion();
-                        versionText.setText(version);
-
-                        String author = "";
-                        if (modpack.getAuthor() != null) {
-                            author = modpack.getAuthor();
-                        }
-                        authorText.setText(author);
-                    });
-                } catch (ManuallyCreatedModpackException e) {
-                    e.printStackTrace();
-                    modpack = null;
-                    activity.runOnUiThread(() -> {
-                        selectLayout.setVisibility(View.GONE);
-                        installLayout.setVisibility(View.VISIBLE);
-                        progressBar.setVisibility(View.GONE);
-                        pathText.setText(filePath);
-                        nameText.setText(file.getName());
-                        versionText.setText("");
-                        authorText.setText("");
-                        editName.setText(FileUtils.getNameWithoutExtension(file));
-                        AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-                        dialog.setTitle(context.getString(R.string.dialog_package_manual_warn_title));
-                        dialog.setMessage(context.getString(R.string.dialog_package_manual_warn_msg));
-                        dialog.setPositiveButton(context.getString(R.string.dialog_package_manual_warn_positive), null);
-                        dialog.setNegativeButton(context.getString(R.string.dialog_package_manual_warn_negative), (DialogInterface dialogInterface, int ii) -> activity.backToLastUI());
-                        dialog.create().show();
-                    });
-                } catch (UnsupportedModpackException | IOException e2) {
-                    e2.printStackTrace();
-                    modpack = null;
-                    activity.runOnUiThread(() -> {
-                        activity.backToLastUI();
-                        AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-                        dialog.setTitle(context.getString(R.string.dialog_package_not_support_title));
-                        dialog.setMessage(context.getString(R.string.dialog_package_not_support_msg));
-                        dialog.setPositiveButton(context.getString(R.string.dialog_package_not_support_exit), null);
-                        dialog.create().show();
-                    });
-                }
-            }).start();
+            parseInstallPackage(new File(filePath), filePath);
         }
+        if (requestCode == SELECT_SAVE_PACKAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
+            Uri uri = data.getData();
+            new EditDownloadNameDialog(context, this, url, false, UriUtils.getRealPathFromUri_AboveApi19(context, uri), downloadCallbacks).show();
+        }
+    }
+
+    private void parseInstallPackage(File file, String filePath) {
+        selectLayout.setVisibility(View.GONE);
+        installLayout.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
+        new Thread(() -> {
+            try {
+                modpack = ModpackHelper.readModpackManifest(file.toPath(), ZipTools.findSuitableEncoding(file.toPath()));
+                activity.runOnUiThread(() -> {
+                    selectLayout.setVisibility(View.GONE);
+                    installLayout.setVisibility(View.VISIBLE);
+                    progressBar.setVisibility(View.GONE);
+                    pathText.setText(filePath);
+
+                    String modPackName = modpack.getName() == null || (StringUtils.isBlank(modpack.getName())) ? FileUtils.getNameWithoutExtension(file) : modpack.getName();
+                    nameText.setText(modPackName);
+                    editName.setText(modPackName);
+
+                    String version = modpack.getVersion() == null ? "" : modpack.getVersion();
+                    versionText.setText(version);
+
+                    String author = "";
+                    if (modpack.getAuthor() != null) {
+                        author = modpack.getAuthor();
+                    }
+                    authorText.setText(author);
+                });
+            } catch (ManuallyCreatedModpackException e) {
+                e.printStackTrace();
+                modpack = null;
+                activity.runOnUiThread(() -> {
+                    selectLayout.setVisibility(View.GONE);
+                    installLayout.setVisibility(View.VISIBLE);
+                    progressBar.setVisibility(View.GONE);
+                    pathText.setText(filePath);
+                    nameText.setText(file.getName());
+                    versionText.setText("");
+                    authorText.setText("");
+                    editName.setText(FileUtils.getNameWithoutExtension(file));
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+                    dialog.setTitle(context.getString(R.string.dialog_package_manual_warn_title));
+                    dialog.setMessage(context.getString(R.string.dialog_package_manual_warn_msg));
+                    dialog.setPositiveButton(context.getString(R.string.dialog_package_manual_warn_positive), null);
+                    dialog.setNegativeButton(context.getString(R.string.dialog_package_manual_warn_negative), (DialogInterface dialogInterface, int ii) -> activity.backToLastUI());
+                    dialog.create().show();
+                });
+            } catch (UnsupportedModpackException | IOException e2) {
+                e2.printStackTrace();
+                modpack = null;
+                activity.runOnUiThread(() -> {
+                    activity.backToLastUI();
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+                    dialog.setTitle(context.getString(R.string.dialog_package_not_support_title));
+                    dialog.setMessage(context.getString(R.string.dialog_package_not_support_msg));
+                    dialog.setPositiveButton(context.getString(R.string.dialog_package_not_support_exit), null);
+                    dialog.create().show();
+                });
+            }
+        }).start();
     }
 }

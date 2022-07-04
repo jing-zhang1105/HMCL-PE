@@ -160,7 +160,8 @@ public class DownloadPackageUI extends BaseUI implements View.OnClickListener, A
         downloadPackageListAdapter = new DownloadResourceAdapter(context,activity,repository,packageList,1);
         packageListView.setAdapter(downloadPackageListAdapter);
 
-        this.installPackage = activity.findViewById(R.id.install_package_from_download_page);
+        installPackage = activity.findViewById(R.id.install_package_from_download_page);
+        installPackage.setOnClickListener(this);
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")

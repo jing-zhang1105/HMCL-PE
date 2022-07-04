@@ -80,10 +80,10 @@ public class FeedbackUI extends BaseUI implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if (v == joinQQ){
-            joinQQGroup("7rX0cr37hu_jNPaGIlqAEf4Ndv1BG-WU");
+//            joinQQGroup("7rX0cr37hu_jNPaGIlqAEf4Ndv1BG-WU");
         }
         if (v == jumpToGit){
-            Uri uri = Uri.parse("https://github.com/Tungstend/HMCL-PE/issues");
+            Uri uri = Uri.parse("https://github.com/577fkj/HMCL-PE/issues");
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
             context.startActivity(intent);
         }

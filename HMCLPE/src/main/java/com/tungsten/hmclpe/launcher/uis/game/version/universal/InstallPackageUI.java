@@ -117,23 +117,26 @@ public class InstallPackageUI extends BaseUI implements View.OnClickListener {
     }
 
     @Override
-    public void onClick(View v) {
-        if (v == installLocal) {
+    public void onClick(View view) {
+        if (view == installLocal) {
             Intent intent = new Intent(context, FileChooser.class);
             intent.putExtra(Constants.SELECTION_MODE, Constants.SELECTION_MODES.SINGLE_SELECTION.ordinal());
             intent.putExtra(Constants.ALLOWED_FILE_EXTENSIONS, "zip;mrpack");
             intent.putExtra(Constants.INITIAL_DIRECTORY, new File(Environment.getExternalStorageDirectory().getAbsolutePath()).getAbsolutePath());
             activity.startActivityForResult(intent, SELECT_PACKAGE_REQUEST);
         }
-        if (v == showDescription && modpack != null && modpack.getDescription() != null && StringUtils.isNotBlank(modpack.getDescription())) {
+        if (view == showDescription && modpack != null && modpack.getDescription() != null && StringUtils.isNotBlank(modpack.getDescription())) {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             builder.setTitle(context.getString(R.string.dialog_package_description_title));
             builder.setMessage(Html.fromHtml(modpack.getDescription(), 0));
             builder.setPositiveButton(context.getString(R.string.dialog_package_description_positive), null);
             builder.create().show();
         }
-        if (v == installOnline) {
+        if (view == installOnline) {
             new EditDownloadUrlDialog(activity, editUrlCallBacks).show();
+        }
+        if (view == install) {
+            // TODO: install modpack
         }
     }
 

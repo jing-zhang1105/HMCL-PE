@@ -2,8 +2,8 @@ name: Android CI
 
 on:
   workflow_dispatch:
-  push:
-    branches: [ main, dev ]
+  pull_request:
+    branches: [ dev , main ]
 
 jobs:
   build:
@@ -39,12 +39,6 @@ jobs:
             !~/.gradle/caches/build-cache-*
           key: gradle-deps-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: gradle-deps
-      - name: Setup Python
-        uses: actions/setup-python@v3.1.2
-        with:
-          python-version: 3.8
-      - name: Install Python dependencies
-        run: python3.8 -m pip install lanzou-api requests demjson setuptools==57.5.0
  
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
@@ -68,5 +62,3 @@ jobs:
         with:
           name: HMCL-PE_debug
           path: ${{ steps.sign_debug.outputs.signedReleaseFile }}
-      - name: Upload and share APK to lanzoucloud
-        run: python UploadLZY.py '${{ secrets.lanzou_cookie }}'

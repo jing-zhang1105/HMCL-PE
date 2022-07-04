@@ -27,6 +27,11 @@ import java.util.concurrent.TimeUnit;
 
 public class DownloadUtil {
 
+    public static String getDownloadUrl(String url) {
+        // 正则表达式替换下载地址 http(s|)://.*?/
+        return "/" + url.replaceAll("http(s|)://.*?/", "");
+    }
+
     public static void downloadSingleFile(Context context,DownloadTaskListBean bean, DownloadTask.Feedback feedback) {
         ArrayList<DownloadTaskListBean> list = new ArrayList<>();
         list.add(bean);

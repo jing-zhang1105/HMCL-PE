@@ -25,6 +25,7 @@ import com.tungsten.hmclpe.utils.file.FileStringUtils;
 import com.tungsten.hmclpe.utils.file.FileUtils;
 import com.tungsten.hmclpe.utils.gson.GsonUtils;
 import com.tungsten.hmclpe.utils.gson.JsonUtils;
+import com.tungsten.hmclpe.utils.io.DownloadUtil;
 import com.tungsten.hmclpe.utils.io.NetworkUtils;
 import com.tungsten.hmclpe.utils.platform.Bits;
 
@@ -98,7 +99,7 @@ public class CheckLibTask extends AsyncTask<RecyclerView,Integer,Exception> {
         AssetIndex assetIndex = gson.fromJson(assetIndexString,AssetIndex.class);
         if (!isRightFile(launchVersion + "/" + new File(launchVersion).getName() + ".jar",version.getDownloadInfo().getSha1())) {
             list.add(new DownloadTaskListBean(new File(launchVersion).getName() + ".jar",
-                    DownloadUrlSource.getSubUrl(DownloadUrlSource.getSource(activity.launcherSetting.downloadUrlSource),DownloadUrlSource.VERSION_JAR) + version.getDownloadInfo().getUrl().replace("https://launcher.mojang.com",""),
+                    DownloadUrlSource.getSubUrl(DownloadUrlSource.getSource(activity.launcherSetting.downloadUrlSource),DownloadUrlSource.VERSION_JAR) + DownloadUtil.getDownloadUrl(version.getDownloadInfo().getUrl()),
                     launchVersion + "/" + new File(launchVersion).getName() + ".jar",
                     version.getDownloadInfo().getSha1()));
         }

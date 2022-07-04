@@ -999,6 +999,8 @@
     <string name="ui_about_tungsten_sub" translatable="false">B 站 ID：@念小六</string>
     <string name="ui_about_shirosakimio_main" translatable="false">ShirosakiMio</string>
     <string name="ui_about_shirosakimio_sub" translatable="false">B 站 ID：@ShirosakiMio</string>
+    <string name="ui_about_fkj_main" translatable="false">方块君</string>
+    <string name="ui_about_fkj_sub" translatable="false">https://github.com/577fkj/</string>
     <string name="ui_about_thank">鸣谢</string>
     <string name="ui_about_tsaltedfishking_main" translatable="false">TSaltedfishKing</string>
     <string name="ui_about_tsaltedfishking_sub">提供 HMCL-PE 官网模板</string>

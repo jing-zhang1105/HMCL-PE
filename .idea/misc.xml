@@ -463,7 +463,11 @@
         <entry key="..\:/program/HMCL-PE/HMCLPE/src/main/res/layout/ui_game_manager_game.xml" value="0.358695652173913" />
         <entry key="..\:/program/HMCL-PE/HMCLPE/src/main/res/layout/ui_install_package.xml" value="0.18489583333333334" />
         <entry key="..\:/program/HMCL-PE/HMCLPE/src/main/res/layout/ui_main.xml" value="0.358695652173913" />
+        <entry key="..\:/program/HMCL-PE/HMCLPE/src/main/res/layout/ui_setting.xml" value="0.17603850050658562" />
+        <entry key="..\:/program/HMCL-PE/HMCLPE/src/main/res/layout/ui_setting_about.xml" value="0.18489583333333334" />
+        <entry key="..\:/program/HMCL-PE/HMCLPE/src/main/res/layout/ui_setting_donate.xml" value="0.18489583333333334" />
         <entry key="..\:/program/HMCL-PE/HMCLPE/src/main/res/layout/ui_setting_global_game.xml" value="0.22" />
+        <entry key="..\:/program/HMCL-PE/HMCLPE/src/main/res/layout/ui_setting_universal.xml" value="0.18489583333333334" />
         <entry key="..\:/program/HMCL-PE/HMCLPE/src/main/res/layout/ui_version_list.xml" value="0.18489583333333334" />
       </map>
     </option>

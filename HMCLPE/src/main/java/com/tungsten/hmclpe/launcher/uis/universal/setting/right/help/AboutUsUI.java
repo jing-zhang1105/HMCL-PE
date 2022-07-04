@@ -20,6 +20,7 @@ public class AboutUsUI extends BaseUI implements View.OnClickListener {
     private ImageButton hmclpe;
     private ImageButton tungs;
     private ImageButton mio;
+    private ImageButton fkj;
 
     private ImageButton saltfish;
     private ImageButton hmcl;
@@ -41,6 +42,7 @@ public class AboutUsUI extends BaseUI implements View.OnClickListener {
         hmclpe = activity.findViewById(R.id.hmclpe_link);
         tungs = activity.findViewById(R.id.tungs_link);
         mio = activity.findViewById(R.id.mio_link);
+        fkj = activity.findViewById(R.id.fkj_link);
 
         saltfish = activity.findViewById(R.id.saltfish_link);
         hmcl = activity.findViewById(R.id.hmcl_link);
@@ -53,6 +55,7 @@ public class AboutUsUI extends BaseUI implements View.OnClickListener {
         hmclpe.setOnClickListener(this);
         tungs.setOnClickListener(this);
         mio.setOnClickListener(this);
+        fkj.setOnClickListener(this);
 
         saltfish.setOnClickListener(this);
         hmcl.setOnClickListener(this);
@@ -88,13 +91,16 @@ public class AboutUsUI extends BaseUI implements View.OnClickListener {
         Uri uri = null;
 
         if (view == hmclpe) {
-            uri = Uri.parse("http://tungstend.hmcl-pe.cn/");
+//            uri = Uri.parse("http://tungstend.hmcl-pe.cn/");
         }
         if (view == tungs) {
             uri = Uri.parse("https://space.bilibili.com/18115101");
         }
         if (view == mio) {
             uri = Uri.parse("https://space.bilibili.com/35801833");
+        }
+        if (view == fkj) {
+            uri = Uri.parse("https://github.com/577fkj");
         }
 
         if (view == saltfish) {

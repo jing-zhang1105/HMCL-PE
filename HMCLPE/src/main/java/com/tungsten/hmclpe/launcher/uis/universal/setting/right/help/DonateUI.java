@@ -55,7 +55,7 @@ public class DonateUI extends BaseUI implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if (v == textView){
-            Uri uri = Uri.parse("https://afdian.net/@tungs");
+            Uri uri = Uri.parse("https://github.com/577fkj/HMCL-PE/");
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
             context.startActivity(intent);
         }

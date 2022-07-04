@@ -103,7 +103,7 @@ public class ModVersionAdapter extends BaseAdapter {
         viewHolder.item.setOnClickListener(view12 -> {
             ui.selectedVersion = list.get(i);
             if (ui.resourceType == 0 || ui.resourceType == 2) {
-                EditDownloadNameDialog dialog = new EditDownloadNameDialog(context, ui, list.get(i), true, null);
+                EditDownloadNameDialog dialog = new EditDownloadNameDialog(context, ui, list.get(i), true, null, null);
                 dialog.show();
             }
             if (ui.resourceType == 1) {

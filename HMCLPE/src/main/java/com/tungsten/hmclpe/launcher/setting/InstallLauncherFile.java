@@ -246,6 +246,11 @@ public class InstallLauncherFile {
             }
 
             @Override
+            public void onDownloadSuccess(String path) {
+
+            }
+
+            @Override
             public void onCancelled() {
 
             }

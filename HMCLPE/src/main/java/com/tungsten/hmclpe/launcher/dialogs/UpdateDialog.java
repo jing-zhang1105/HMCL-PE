@@ -126,6 +126,11 @@ public class UpdateDialog extends Dialog implements View.OnClickListener, Handle
             }
 
             @Override
+            public void onDownloadSuccess(String path) {
+
+            }
+
+            @Override
             public void onCancelled() {
 
             }

@@ -439,8 +439,27 @@
         <entry key="..\:/Users/Tungsten/Desktop/Projects/HelloMinecraftLauncherPocketEdition/filepicker/src/main/res/menu/toolbar_default_menu_filechooser.xml" value="0.12708333333333333" />
         <entry key="..\:/Users/Tungsten/Desktop/Projects/HelloMinecraftLauncherPocketEdition/filepicker/src/main/res/menu/toolbar_multiselect_menu.xml" value="0.12708333333333333" />
         <entry key="..\:/Users/Tungsten/Desktop/Projects/HelloMinecraftLauncherPocketEdition/filepicker/src/main/res/menu/toolbar_multiselect_menu_filechooser.xml" value="0.12708333333333333" />
+        <entry key="..\:/program/HMCL-PE/HMCLPE/src/main/res/drawable/game_float_window.xml" value="0.1885" />
+        <entry key="..\:/program/HMCL-PE/HMCLPE/src/main/res/drawable/game_input_dialog.xml" value="0.1885" />
+        <entry key="..\:/program/HMCL-PE/HMCLPE/src/main/res/drawable/ic_baseline_add_black.xml" value="0.1885" />
+        <entry key="..\:/program/HMCL-PE/HMCLPE/src/main/res/drawable/ic_baseline_add_white.xml" value="0.1885" />
+        <entry key="..\:/program/HMCL-PE/HMCLPE/src/main/res/drawable/ic_baseline_alert_black.xml" value="0.1885" />
+        <entry key="..\:/program/HMCL-PE/HMCLPE/src/main/res/drawable/ic_baseline_arrow_drop_down_black.xml" value="0.1885" />
+        <entry key="..\:/program/HMCL-PE/HMCLPE/src/main/res/drawable/ic_baseline_arrow_forward_black.xml" value="0.1885" />
+        <entry key="..\:/program/HMCL-PE/HMCLPE/src/main/res/drawable/ic_baseline_arrow_white.xml" value="0.1885" />
+        <entry key="..\:/program/HMCL-PE/HMCLPE/src/main/res/drawable/ic_baseline_cancel_black.xml" value="0.1885" />
+        <entry key="..\:/program/HMCL-PE/HMCLPE/src/main/res/drawable/ic_baseline_clock_black.xml" value="0.1885" />
+        <entry key="..\:/program/HMCL-PE/HMCLPE/src/main/res/drawable/ic_baseline_close_black.xml" value="0.1885" />
+        <entry key="..\:/program/HMCL-PE/HMCLPE/src/main/res/drawable/ic_baseline_close_white.xml" value="0.1885" />
+        <entry key="..\:/program/HMCL-PE/HMCLPE/src/main/res/drawable/ic_baseline_microsoft_black.xml" value="0.1885" />
+        <entry key="..\:/program/HMCL-PE/HMCLPE/src/main/res/drawable/ic_baseline_mojang_black.xml" value="0.1885" />
         <entry key="..\:/program/HMCL-PE/HMCLPE/src/main/res/layout/activity_main.xml" value="0.1272644927536232" />
+        <entry key="..\:/program/HMCL-PE/HMCLPE/src/main/res/layout/dialog_download.xml" value="0.17603850050658562" />
+        <entry key="..\:/program/HMCL-PE/HMCLPE/src/main/res/layout/dialog_edit_download_name.xml" value="0.3203125" />
+        <entry key="..\:/program/HMCL-PE/HMCLPE/src/main/res/layout/dialog_edit_download_url.xml" value="0.358695652173913" />
         <entry key="..\:/program/HMCL-PE/HMCLPE/src/main/res/layout/dialog_update_launcher.xml" value="0.1272644927536232" />
+        <entry key="..\:/program/HMCL-PE/HMCLPE/src/main/res/layout/ui_download_package.xml" value="0.18489583333333334" />
+        <entry key="..\:/program/HMCL-PE/HMCLPE/src/main/res/layout/ui_download_resource.xml" value="0.25" />
         <entry key="..\:/program/HMCL-PE/HMCLPE/src/main/res/layout/ui_game_manager_game.xml" value="0.358695652173913" />
         <entry key="..\:/program/HMCL-PE/HMCLPE/src/main/res/layout/ui_install_package.xml" value="0.18489583333333334" />
         <entry key="..\:/program/HMCL-PE/HMCLPE/src/main/res/layout/ui_main.xml" value="0.358695652173913" />

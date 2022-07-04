@@ -43,11 +43,20 @@ public class DownloadDialog extends Dialog implements View.OnClickListener, Hand
     private Handler handler;
     private DownloadTask downloadTask;
 
-    public DownloadDialog(@NonNull Context context, MainActivity activity, ArrayList<DownloadTaskListBean> list, boolean alert) {
+    private CallBacks callBacks;
+
+    public interface CallBacks {
+        void onDownloadSuccess(String path);
+
+        void onDownloadError(ArrayList<DownloadTaskListBean> failedFile);
+    }
+
+    public DownloadDialog(@NonNull Context context, MainActivity activity, ArrayList<DownloadTaskListBean> list, boolean alert, CallBacks callBacks) {
         super(context);
         this.activity = activity;
         this.list = list;
         this.alert = alert;
+        this.callBacks = callBacks;
         setContentView(R.layout.dialog_download);
         setCancelable(false);
         init();
@@ -110,6 +119,7 @@ public class DownloadDialog extends Dialog implements View.OnClickListener, Hand
             public void onFinished(ArrayList<DownloadTaskListBean> failedFile) {
                 DownloadDialog.this.handler.post(() -> {
                     if (failedFile.size() > 0) {
+                        callBacks.onDownloadError(failedFile);
                         StringBuilder stringBuilder = new StringBuilder();
                         stringBuilder.append("The following files failed to download:");
                         for (DownloadTaskListBean bean : failedFile) {
@@ -125,6 +135,13 @@ public class DownloadDialog extends Dialog implements View.OnClickListener, Hand
                             Toast.makeText(getContext(),getContext().getString(R.string.dialog_download_success),Toast.LENGTH_SHORT).show();
                         }
                     }
+                });
+            }
+
+            @Override
+            public void onDownloadSuccess(String path) {
+                DownloadDialog.this.handler.post(() -> {
+                    callBacks.onDownloadSuccess(path);
                 });
             }
 

@@ -37,6 +37,7 @@ public class DownloadTask extends AsyncTask<ArrayList<DownloadTaskListBean>, Int
         public abstract void updateSpeed(String speed);
         public abstract void removeTask(DownloadTaskListBean bean);
         public abstract void onFinished(ArrayList<DownloadTaskListBean> failedFile);
+        public abstract void onDownloadSuccess(String path);
         public abstract void onCancelled();
     }
 
@@ -92,10 +93,10 @@ public class DownloadTask extends AsyncTask<ArrayList<DownloadTaskListBean>, Int
                             }
                         };
                         if (downloadFileMonitored(url, path, sha1, fb)) {
+                            feedback.onDownloadSuccess(path);
                             feedback.removeTask(bean);
                             break;
-                        }
-                        else {
+                        } else {
                             if (i == tryTimes - 1) {
                                 failedFile.add(bean);
                             }

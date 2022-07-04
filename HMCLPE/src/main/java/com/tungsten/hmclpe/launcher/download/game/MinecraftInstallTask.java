@@ -23,7 +23,7 @@ import com.tungsten.hmclpe.utils.platform.Bits;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class MinecraftInstallTask extends AsyncTask<VersionManifest.Version,Integer, Version> {
+public class MinecraftInstallTask extends AsyncTask<VersionManifest.Version, Integer, Version> {
 
     private MainActivity activity;
     private String name;
@@ -40,9 +40,9 @@ public class MinecraftInstallTask extends AsyncTask<VersionManifest.Version,Inte
         this.adapter = adapter;
         this.callback = callback;
 
-        this.priBean = new DownloadTaskListBean(activity.getString(R.string.dialog_install_game_install_game),"","","");
-        this.secBean = new DownloadTaskListBean(activity.getString(R.string.dialog_install_game_install_game_libs),"","","");
-        this.thiBean = new DownloadTaskListBean(activity.getString(R.string.dialog_install_game_install_game_assets),"","","");
+        this.priBean = new DownloadTaskListBean(activity.getString(R.string.dialog_install_game_install_game), "", "", "");
+        this.secBean = new DownloadTaskListBean(activity.getString(R.string.dialog_install_game_install_game_libs), "", "", "");
+        this.thiBean = new DownloadTaskListBean(activity.getString(R.string.dialog_install_game_install_game_assets), "", "", "");
     }
 
     @Override
@@ -59,7 +59,7 @@ public class MinecraftInstallTask extends AsyncTask<VersionManifest.Version,Inte
             onProgressUpdate(0);
         });
 
-        String versionJsonUrl = DownloadUrlSource.getSubUrl(DownloadUrlSource.getSource(activity.launcherSetting.downloadUrlSource),DownloadUrlSource.VERSION_JSON) + gameVersion.url.replace("https://launchermeta.mojang.com","");
+        String versionJsonUrl = DownloadUrlSource.getSubUrl(DownloadUrlSource.getSource(activity.launcherSetting.downloadUrlSource), DownloadUrlSource.VERSION_JSON) + DownloadUtil.getDownloadUrl(gameVersion.url);
 
         String versionJson = null;
         try {
@@ -77,7 +77,7 @@ public class MinecraftInstallTask extends AsyncTask<VersionManifest.Version,Inte
                 .create();
         Version rawPatch = gson.fromJson(versionJson, Version.class);
 
-        String assetIndexUrl = DownloadUrlSource.getSubUrl(DownloadUrlSource.getSource(activity.launcherSetting.downloadUrlSource),DownloadUrlSource.ASSETS_INDEX_JSON) + rawPatch.getAssetIndex().getUrl().replace("https://launchermeta.mojang.com","");
+        String assetIndexUrl = DownloadUrlSource.getSubUrl(DownloadUrlSource.getSource(activity.launcherSetting.downloadUrlSource), DownloadUrlSource.ASSETS_INDEX_JSON) + DownloadUtil.getDownloadUrl(rawPatch.getAssetIndex().getUrl());
         String assetIndexJson = null;
         try {
             assetIndexJson = NetworkUtils.doGet(NetworkUtils.toURL(assetIndexUrl));
@@ -86,18 +86,18 @@ public class MinecraftInstallTask extends AsyncTask<VersionManifest.Version,Inte
             if (!isCancelled()) callback.onFailed(e);
             cancel(true);
         }
-        AssetIndex assetIndex = gson.fromJson(assetIndexJson,AssetIndex.class);
+        AssetIndex assetIndex = gson.fromJson(assetIndexJson, AssetIndex.class);
 
         ArrayList<DownloadTaskListBean> libList = new ArrayList<>();
         libList.add(new DownloadTaskListBean(name + ".jar",
-                DownloadUrlSource.getSubUrl(DownloadUrlSource.getSource(activity.launcherSetting.downloadUrlSource),DownloadUrlSource.VERSION_JAR) + rawPatch.getDownloadInfo().getUrl().replace("https://launcher.mojang.com",""),
+                DownloadUrlSource.getSubUrl(DownloadUrlSource.getSource(activity.launcherSetting.downloadUrlSource), DownloadUrlSource.VERSION_JAR) + DownloadUtil.getDownloadUrl(rawPatch.getDownloadInfo().getUrl()),
                 activity.launcherSetting.gameFileDirectory + "/versions/" + name + "/" + name + ".jar",
                 rawPatch.getDownloadInfo().getSha1()));
-        for (Library library : rawPatch.getLibraries()){
+        for (Library library : rawPatch.getLibraries()) {
             if (!library.getPath().contains("tv/twitch") && !library.getPath().contains("lwjgl-platform-2.9.1-nightly")) {
                 DownloadTaskListBean bean = new DownloadTaskListBean(library.getArtifactFileName(),
-                        DownloadUrlSource.getSubUrl(DownloadUrlSource.getSource(activity.launcherSetting.downloadUrlSource),DownloadUrlSource.LIBRARIES) + "/" + library.getPath(),
-                        activity.launcherSetting.gameFileDirectory + "/libraries/" +library.getPath(),
+                        DownloadUrlSource.getSubUrl(DownloadUrlSource.getSource(activity.launcherSetting.downloadUrlSource), DownloadUrlSource.LIBRARIES) + "/" + library.getPath(),
+                        activity.launcherSetting.gameFileDirectory + "/libraries/" + library.getPath(),
                         library.getDownload().getSha1());
                 libList.add(bean);
             }
@@ -108,9 +108,9 @@ public class MinecraftInstallTask extends AsyncTask<VersionManifest.Version,Inte
                 assetIndexUrl,
                 activity.launcherSetting.gameFileDirectory + "/assets/indexes/" + rawPatch.getAssetIndex().id + ".json",
                 rawPatch.getAssetIndex().getSha1()));
-        for (AssetObject object : assetIndex.getObjects().values()){
+        for (AssetObject object : assetIndex.getObjects().values()) {
             DownloadTaskListBean bean = new DownloadTaskListBean(object.getHash(),
-                    DownloadUrlSource.getSubUrl(DownloadUrlSource.getSource(activity.launcherSetting.downloadUrlSource),DownloadUrlSource.ASSETS_OBJ) + "/" + object.getLocation(),
+                    DownloadUrlSource.getSubUrl(DownloadUrlSource.getSource(activity.launcherSetting.downloadUrlSource), DownloadUrlSource.ASSETS_OBJ) + "/" + object.getLocation(),
                     activity.launcherSetting.gameFileDirectory + "/assets/objects/" + object.getLocation(),
                     object.getHash());
             assetsList.add(bean);
@@ -205,9 +205,11 @@ public class MinecraftInstallTask extends AsyncTask<VersionManifest.Version,Inte
         callback.onFinish(version);
     }
 
-    public interface InstallMinecraftCallback{
+    public interface InstallMinecraftCallback {
         void onStart();
+
         void onFailed(Exception e);
+
         void onFinish(Version version);
     }
 }

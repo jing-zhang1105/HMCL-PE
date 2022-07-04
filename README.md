@@ -5,6 +5,8 @@
  
  # 源仓库已删除
  
+ [直链下载](https://nightly.link/577fkj/HMCL-PE/workflows/Android/dev/HMCL-PE_debug.zip)
+ 
  不定期更新
  
  # 下面是原本信息
